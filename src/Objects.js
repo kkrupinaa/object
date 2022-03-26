@@ -1,3 +1,5 @@
+import { isObject } from 'util';
+
 /*
   В функцию personUpdate() приходят данные в виде объекта, содержащую некую информацию о человеке.
   Если этот человек является женщиной (свойство gender содержит значение 'female'), то из этого объекта
@@ -8,6 +10,13 @@
   Объект после манипуляций следует вернуть в качестве результата работы функции.
 */
 export function personUpdate(data) {
+    if (data.gender == 'female' && data.hasOwnProperty('age')) {
+        delete data.age;
+    }
+    if (data.gender == 'male' && !data.hasOwnProperty('income')) {
+        data.income = 100000;
+    }
+    return data;
 }
 
 /*
@@ -15,6 +24,21 @@ export function personUpdate(data) {
   Верните список названий этих полей в алфавитном порядке в виде массива строк.
 */
 export function objectFieldsList(obj1, obj2, obj3) {
+    let result = [];
+    for (let key in obj1) {
+        if (obj1.hasOwnProperty(key) && result.indexOf(key) == -1)
+            result.push(key);
+    }
+    for (let key in obj2) {
+        if (obj2.hasOwnProperty(key) && result.indexOf(key) == -1)
+            result.push(key);
+    }
+    for (let key in obj3) {
+        if (obj3.hasOwnProperty(key) && result.indexOf(key) == -1)
+            result.push(key);
+    }
+    result.sort();
+    return result;
 }
 
 /*
@@ -23,4 +47,16 @@ export function objectFieldsList(obj1, obj2, obj3) {
   Количество клонов - count.
 */
 export function objectClone(obj, count) {
+    let result = [];
+    for (let i = 0; i < count; i++) {
+        let newObj = {};
+        for (let key in obj) {
+            if (typeof obj[key] == 'object') {
+                newObj[key] = { ...obj[key] };
+            } else newObj[key] = obj[key];
+        }
+        newObj.id = i;
+        result.push(newObj);
+    }
+    return result;
 }
